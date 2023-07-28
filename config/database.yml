@@ -23,12 +23,13 @@ test:
 production:
   <<: *default
   # heroku用
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  username: 'user'
-  password: 'password'
-  database: 'db'
+  url: <%= ENV['DATABASE_URL'] %>
+  # adapter: postgresql
+  # encoding: unicode
+  # pool: 5
+  # username: 'user'
+  # password: 'password'
+  # database: 'db'
 
   # # MySQL
   # adapter: mysql2

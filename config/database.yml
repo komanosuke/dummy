@@ -24,7 +24,7 @@ production:
   <<: *default
   # heroku用
   url: <%= ENV['DATABASE_URL'] %>
-  database: dbkhau3d02qten
+  database: d6gk1hpqlnm7ev
   # adapter: postgresql
   # encoding: unicode
   # pool: 5

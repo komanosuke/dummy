@@ -1,0 +1,65 @@
+<main>
+    <div class="side-bar pc">
+        <%= render 'social_media/sidebar' %>
+    </div>
+
+    <div class="contents" id="sns-contents">
+        <div id="sns-container">
+            <div id="flash"><%= flash[:notice] %><%= flash[:success] %><%= flash[:error] %></div>
+            
+            
+                <div class="posts-show-container">
+                    <a href="/posted/<%= @post.user.id %>" class="post-name" id="sns-show-post-name">
+                        <%= image_tag @post.user.image.url, class:"sns-thumb", alt:"" %>
+                        <p><%= @post.user.name %></p>
+                        <p><%= @post.user.username %></p>
+                    </a>
+                    <div class="follow-wrapper" id="show-follow-wrapper">
+                        <%= render 'posts/show_relationships' %>
+                    </div>
+                </div>
+            
+            <p class="left"><%= @post.content %></p>
+            <% if @post.image.to_s != 'noimage.jpg' %>
+                <%= image_tag @post.image.url, class:"sns-post-img sns-show-img", alt:"" %>
+            <% end %>
+
+            <% if logged_in? %>
+                <div id="show-like">
+                    <%= render 'posts/show_like' %>
+                </div>
+
+                <p>コメントしてみる</p>
+                <%= form_with model:@comment, url: post_comments_path(@post.id), method: :post do |form| %>
+                    <%#= form.hidden_field :user_id, value: current_user %>
+                    <%= form.text_area :content, autofocus: true, maxlength: 200, placeholder: "コメントを入力してください", required: true %>
+                    <%= form.submit "コメント投稿する", class: "sns-btn" %>
+                <% end %>
+
+                <p>コメント投稿 一覧<span> / コメント数: <%= @post.comments.count %></span></p>
+                <% if @post.comments.count != 0 %>
+                    <% @post.comments.each do |comment| %>
+                        <div class="thumb-wrapper comment-wrapper">
+                            <a href="/posted/<%= comment.user.id %>" class="sns-users-link-comment">
+                                <div class="post-name-wrapper">
+                                    <%= image_tag comment.user.image.url, class:"sns-thumb", alt:"" %>
+                                    <p><%= comment.user.name %></p>
+                                    <p><%= comment.user.username %></p>
+                                </div>
+                            </a>
+                            <p class="left link-comment-content"><%= comment.content %></p>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <p>コメントはありません。</p>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</main>
+
+<% if @post.user == current_user %>
+    <script>
+        $("#show-follow-wrapper").css("display", "none");
+    </script>
+<% end %>

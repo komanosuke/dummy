@@ -1,0 +1,30 @@
+<div class="brand-theme">Anti Nihilism Fashion Brand</div>
+<%= image_tag "/image/mid_main3.png", class:"header-img sp", alt:"" %>
+
+<div id="cxxsew-contents">
+    <div class="article">
+        <h1>- Contents -</h1>
+        
+        <p class="center">ここでは、CxxSewのデザイナーによる写真や文章をブログ形式でご覧いただけます。</p>
+    </div>
+    
+    <% if @articles.empty? %>
+        <p>まだコンテンツが投稿されていません。</p>
+    <% else %>
+        <div id="content">
+            <div class="works">
+                <% @articles.each do |article| %>
+                    <div class="work">
+                        <a href="/articles/<%= article.id %>">
+                            <%= image_tag article.image.url, alt:"" %>
+                            <div>
+                                <p class="date"><%= article.updated_at %></p>
+                                <p class="center"><%= article.title %></p>
+                            </div>
+                        </a>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    <% end %>
+</div>

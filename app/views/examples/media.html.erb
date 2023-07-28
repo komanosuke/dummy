@@ -1,0 +1,22 @@
+<main id="media-main">
+    <div id="media-back-cover"></div>
+    <div class="contents" id="media-con">
+        <h1>AIに関する新着ニュース</h1>
+        <div class="article">
+            <p class="center color-white">YahooニュースからAIに関する新着ニュースをスクレイピングしています。</p>
+        </div>
+        <div class="works pfs">
+            <% @articles.each do |article| %>
+                <div class="work pf">
+                    <a href=<%= article[:url] %> target="_blank">
+                        <%= image_tag article[:image], alt:"" %>
+                        <div class="pf-p-wrapper media-wrapper">
+                            <p><%= article[:title] %></p>
+                        </div>
+                    </a>
+                </div>
+            <% end %>
+        </div>
+        <%= paginate @articles %>
+    </div>
+</main>

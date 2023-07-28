@@ -1,0 +1,265 @@
+<main>
+    <div class="contents" id="socket-con">
+        <h1>IoT機器へのコマンド送信アプリ（DEMO）</h1>
+        <p id="socket-con-exp">IoT機器側でTCPソケットの受信プログラムを書くことで、ブラウザからIoT機器を操作できるようになります。※DEMOでは画面上のロボットに反映されます。</p>
+
+        <h2>IoT機器の操作パネル（DEMO）</h2>
+        <div id="demo-wrapper">
+            <%= image_tag "/image/robota.png", id:"demo-img-back" %>
+            <div id="demo-img">
+                <div class="robot-eyes" id="left-eye"></div>
+                <div class="robot-eyes" id="right-eye"></div>
+                <%= image_tag "/image/robota.png" %>
+                <% if logged_in? %>
+                    <div id="robot_photo">
+                        <%= image_tag @user.photo.to_s %>
+                    </div>
+                    <div id="robot_mp4">
+                        <% if @user.video.to_s == '' %>
+                            <%= image_tag "/image/noimage.jpg" %>
+                        <% else %>
+                            <%= video_tag(@user.video.to_s, loop: true, autoplay: true, muted: true, controls: true) %> 
+                        <% end %>
+                    </div>
+                <% else %>
+                    <div id="robot_photo">
+                        <%= image_tag "/image/noimage.jpg" %>
+                    </div>
+                    <div id="robot_mp4">
+                        <%= image_tag "/image/noimage.jpg" %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+        <div class="panel_item_wrap">
+
+            <div class="panel_item">
+                <div class="panel_item_content">
+                    <div class="panel_item_ttl">
+                        <h2>LEDカラーの変更</h2>
+                        <p>IoT機器のLEDのカラーを変更することができます。</p>
+                    </div>
+                    <div class="form_item">
+                        <label>プリセットカラーから選択する</label>
+                        <input type="color" class="preset_color" id="preset_red" value="#EF5658">
+                        <input type="color" class="preset_color" id="preset_orange" value="#FF803C">
+                        <input type="color" class="preset_color" id="preset_yellow" value="#FFDE2B">
+                        <input type="color" class="preset_color" id="preset_green" value="#44D049">
+                        <input type="color" class="preset_color" id="preset_skyblue" value="#6ABBEF">
+                        <input type="color" class="preset_color" id="preset_blue" value="#3C76F7">
+                        <input type="color" class="preset_color" id="preset_purple" value="#8556EF">
+                        <input type="color" class="preset_color" id="preset_white" value="#F0F3F8">
+                    </div>
+                    <div class="form_item">
+                        <label>カラーコードで指定する</label>
+                        <input name="led_color" id="led_color" type="text" value="" placeholder="#ffffff">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel_item">
+                <div class="panel_item_content">
+                    <div class="panel_item_ttl">
+                        <h2>ディスプレイの表示</h2>
+                        <p>IoT機器のモニターに画像を表示することができます。</p>
+                    </div>
+                    <div class="flex_container_start upload_item">
+                        <div class="upload">
+                            <label class="upload_file">
+                                    ここを<span>クリック</span>または<br>ドラッグ＆ドロップで<br>ファイルをアップロード
+                                    <%= form_with model: @user, local: false, method: :patch do |f| %>
+                                        <%= f.file_field :photo, id:'pdf_file', class:"logged_in_submit", accept:'image/*', required: true %>
+                                        <%= f.hidden_field :name, id:'pdf_name' %>
+                                        <%= f.submit "更新", id:"pdf_submit", class:"logged_in_submit" %>
+                                    <% end %>
+                            </label>
+                        </div>
+                        <div class="preview upload-preview">
+                            <label>プレビュー</label>
+                            <div class="preview_file preview_file_img" id="preview">
+                                <% if logged_in? %>
+                                    <%= image_tag @user.photo.to_s, id:"preview_image" %>
+                                <% else %>
+                                    <%= image_tag '/image/noimage.jpg', id:"preview_image" %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="photo_switch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="panel_item">
+                <div class="panel_item_content">
+                    <div class="panel_item_ttl">
+                        <h2>映像ファイルの表示</h2>
+                        <p>IoT機器のモニターにMP4動画を表示することができます。</p>
+                    </div>
+                    <div class="flex_container_start upload_item">
+                        <div class="upload">
+                            <label class="upload_file">
+                                    ここを<span>クリック</span>または<br>ドラッグ＆ドロップで<br>ファイルをアップロード
+                                    <%= form_with model: @user, local: false, method: :patch do |f| %>
+                                        <%= f.file_field :video, id:'movie_file', class:"logged_in_submit", accept:'video/*', required: true %>
+                                        <%= f.submit "更新", id:"movie_submit", class:"logged_in_submit" %>
+                                    <% end %>
+                            </label>
+                        </div>
+                        <div class="preview upload-preview">
+                            <label>プレビュー</label>
+                            <div class="preview_file preview_file_video">
+                                <% if logged_in? %>
+                                    <% if @user.video.to_s == '' %>
+                                        <%= image_tag "/image/noimage.jpg", id:"mp4_preview_dummy", alt: "現在何も表示されていません" %>
+                                    <% else %>
+                                        <%= video_tag(@user.video.to_s, loop: true, autoplay: true, muted: true, controls: true, id:"mp4_preview_video") %> 
+                                    <% end %>
+                                <% else %>
+                                    <%= image_tag "/image/noimage.jpg", id:"mp4_preview_dummy", alt: "現在何も表示されていません" %>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="mp4_switch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="panel_item">
+                <div class="panel_item_content">
+                    <div class="panel_item_ttl">
+                        <h2>音楽ファイルの再生</h2>
+                        <p>IoT機器のスピーカーからMP3ファイルを再生することができます。</p>
+                    </div>
+                    <div class="flex_container_start upload_item" id="audio_item">
+                        <div class="upload">
+                            <label class="upload_file">
+                                    ここを<span>クリック</span>または<br>ドラッグ＆ドロップで<br>ファイルをアップロード
+                                    <%= form_with model: @user, local: false, method: :patch do |f| %>
+                                        <%= f.file_field :audio, :size => 140, id:'audio_file', class:"logged_in_submit", accept:'audio/mp3', required: true %>
+                                        <%= f.submit "更新", id:"audio_submit", class:"logged_in_submit" %>
+                                    <% end %>
+                            </label>
+                        </div>
+                    </div>
+                    <% if logged_in? %>
+                        <% if @user.audio.to_s == '' %>
+                            <p>現在、音楽ファイルはありません。</p>
+                        <% else %>
+                            <audio src= "<%= "#{@user.audio}" %>" controls="" id="audio_player">
+                        <% end %>
+                    <% else %>
+                        <p>現在、音楽ファイルはありません。</p>
+                    <% end %>
+                </div>
+            </div>
+
+        <h2>IoT機器からのデータ受信（DEMO）</h2>
+        <div id="data"></div>
+        <div id="graphs">
+            <div class="graph_item">
+                <div>IoT機器のバッテリー残量</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の電圧</p><span>0</span>V</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器の基盤温度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の基盤温度</p><span>0</span>℃</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の外気温</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の外気温</p><span>0</span>℃</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>Wi-Fi接続台数</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の接続台数</p><span>0</span>台</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の湿度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の湿度</p><span>0</span>%RH</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の照度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の照度</p><span>0</span>LX</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の気圧</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の気圧</p><span>0</span>hPa</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺のノイズ</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在のノイズ</p><span>0</span>dB</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の揮発性有機化合物濃度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の揮発性有機化合物濃度</p><span>0</span>ppmC</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺のCO2濃度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在のCO2濃度</p><span>0</span>ppm</div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の不快指数</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の不快指数</p><span>0</span></div>
+                </div>
+            </div>
+            <div class="graph_item">
+                <div>IoT機器周辺の熱中症警戒度</div>
+                <div>
+                    <canvas class="ex_chart"></canvas>
+                    <div class="graph_value"><p>現在の熱中症警戒度</p><span>0</span></div>
+                </div>
+            </div>
+        </div>
+            
+        </div>
+    </div>
+</div>
+</main>
+
+<%= javascript_include_tag 'socket.js' %>
+
+<% if !(logged_in?) %>
+    <script>
+        $(".logged_in_submit").click(function(event) {
+            event.preventDefault();
+            alert("アップロード機能を利用するにはログインが必要です。");
+        });
+    </script>
+<% end %>

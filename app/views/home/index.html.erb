@@ -1,0 +1,86 @@
+<main>
+    <div class="contents">
+        <div id="flash"><%= flash[:success] %></div>
+        <h1>- My Portfolio Site -</h1>
+        <p id="home-p">ご訪問いただきありがとうございます。以下は作成したポートフォリオの一覧です。<br>
+        それぞれ簡単なWebアプリケーションですが、採用の判断材料としてご確認頂けると幸いです。</p>
+        <p>駒井　俊彦</p>
+        <div class="works pfs">
+            <div class="work pf">
+                <a href="/index">
+                    <%= image_tag "/image/mid_main1.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>ファッションブランド<br>CxxSewのECショップ</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/posts">
+                    <%= image_tag "/image/art.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>ファッションデザイナー<br>特化型SNS</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/studies">
+                    <%= image_tag "/image/card6.jpg", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>学習サイト<br>Liberal Earth</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/english_grade1">
+                    <%= image_tag "/image/castle.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>英検１級単語ドリル</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/doraemon">
+                    <%= image_tag "/image/doraemon.jpeg", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>ChatGPT API連携<br>ドラえもんトーク</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/socket">
+                    <%= image_tag "/image/gadget.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>IoT機器と<br>通信できるアプリ</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/cost">
+                    <%= image_tag "/image/money.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>人生設計<br>生涯収支の概算アプリ</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/portrait">
+                    <%= image_tag "/image/portrait09.PNG", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>似顔絵展</p>
+                    </div>
+                </a>
+            </div>
+            <div class="work pf">
+                <a href="/media">
+                    <%= image_tag "/image/ai_space.png", alt:"" %>
+                    <div class="pf-p-wrapper">
+                        <p>AI関連ニュース<br>メディアサイト</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <% if logged_in? %>
+            <a href="/users/<%= current_user.id %>"><div class="btn sub-btn" id="my-profile">My Page</div></a>
+        <% end %>
+    </div>
+</main>

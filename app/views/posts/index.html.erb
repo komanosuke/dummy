@@ -1,0 +1,19 @@
+<main>
+    <div class="side-bar pc">
+        <%= render 'social_media/sidebar' %>
+    </div>
+
+    <div class="contents sns-top" id="sns-contents">
+        <div id="flash"><%#= flash[:notice] %><%#= flash[:success] %><%#= flash[:error] %></div>
+        <div class="works sns-posts" id="posts-each-do">
+            <%= render 'posts', posts: @posts %>
+        </div>
+        <div class="none"><%= paginate @posts, remote: true %></div>
+        <div class="none" id="loading">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</main>
+
+<%= javascript_pack_tag 'sns' %>
+<%= javascript_include_tag 'loading' %>

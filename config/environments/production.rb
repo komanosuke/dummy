@@ -25,7 +25,7 @@ Rails.application.configure do
   #   expires_in: 1.day
   # }
 
-  config.action_mailer.default_url_options = { protocol: 'https', host:'https://portfolio-cxxsew-496dbad8f9a7.herokuapp.com/'}
+  config.action_mailer.default_url_options = { protocol: 'https', host:'https://dummy-dummy-9ff759c2c373.herokuapp.com/'}
 
   config.action_mailer.delivery_method = :smtp
 
@@ -37,8 +37,7 @@ Rails.application.configure do
     domain:               'gmail.com',
     user_name:            ENV['SMTP_USERNAME'],
     password:             ENV['SMTP_PASSWORD'],
-    authentication: :plain,
-    enable_starttls_auto: true
+    authentication: :plain
   }
   # config.action_mailer.default_url_options = { host: 'example.com' }
   
